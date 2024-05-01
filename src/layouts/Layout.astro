@@ -1,0 +1,84 @@
+---
+import BottomNav from "../components/Layouts/BottomNav.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const { title, description, image } = Astro.props;
+var Title = title ? `${title} / Shyntorie` : "No title / Shyntorie";
+var Description = description ? description : "No description";
+var Image = image ? image : `${Astro.url}assets/images/banner/default.jpg`;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{Title}</title>
+    <meta name="title" content={Title} />
+    <meta name="description" content={Description} />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={Title} />
+    <meta property="og:description" content={Description} />
+    <meta property="og:image" content={Image} />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={Title} />
+    <meta property="twitter:description" content={Description} />
+    <meta property="twitter:image" content={Image} />
+  </head>
+  <body
+    class="selection:bg-neutral-800 selection:text-neutral-100 dark:bg-neutral-900"
+  >
+    <main
+      class="relative min-h-screen text-center sm:flex sm:items-center sm:justify-center"
+    >
+      <slot />
+    </main>
+    <nav>
+      <BottomNav />
+    </nav>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --accent: 136, 58, 234;
+    --accent-light: 224, 204, 250;
+    --accent-dark: 49, 10, 101;
+    --accent-gradient: linear-gradient(
+      45deg,
+      rgb(var(--accent)),
+      rgb(var(--accent-light)) 30%,
+      white 60%
+    );
+  }
+  html {
+    font-family: system-ui, sans-serif;
+    background-size: 224px;
+  }
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+    max-width: calc(100% - 2rem);
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
+  }
+</style>
+
+<script
+  is:global
+  src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.0/flowbite.min.js"
+></script>

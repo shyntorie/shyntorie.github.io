@@ -1,0 +1,129 @@
+---
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { Icon } from "astro-icon/components";
+dayjs.extend(utc);
+var currentHours = `${dayjs().hour()}:${dayjs().minute()}`;
+
+const icon_css = {
+  list: "w-4 h-4",
+  color: {
+    normal:
+      "text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white",
+    active:
+      "text-neutral-200 dark:text-neutral-200 group-hover:text-neutral-900 dark:group-hover:text-white",
+  },
+};
+
+const pathname = new URL(Astro.request.url).pathname;
+const currentPath = pathname.slice(1);
+const pages = [
+  { title: "Home", slug: "", icon: "material-symbols:home" },
+  {
+    title: "Repos",
+    slug: "repos",
+    icon: "material-symbols:code",
+  },
+];
+
+const socials = [
+  {
+    title: "GitHub",
+    href: "https://github.com/shyntorie",
+    icon: "logos:github-icon",
+    css: "invert",
+  },
+];
+---
+
+<div
+  class="fixed bottom-0 left-0 z-50 grid w-full h-16 grid-cols-1 px-8 border-t border-gray-200 md:grid-cols-3 dark:bg-neutral-900 dark:border-neutral-800"
+>
+  <div
+    data-tooltip-target="tooltip-clock"
+    data-tooltip-trigger="hover"
+    class="items-center justify-center hidden text-gray-500 dark:text-gray-400 me-auto md:flex"
+  >
+    <Icon
+      name="material-symbols:nest-clock-farsight-analog-rounded"
+      class="w-5 h-5 me-2"
+    />
+    <span class="text-sm cursor-default">{currentHours}</span>
+  </div>
+  <div
+    id="tooltip-clock"
+    role="tooltip"
+    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+  >
+    You loaded the page at {currentHours}
+    <div class="tooltip-arrow" data-popper-arrow></div>
+  </div>
+  <div class="flex items-center justify-center mx-auto">
+    {
+      pages.map((page) => (
+        <>
+          <a href={"/" + page.slug} title={page.title} rel="noopener">
+            <button
+              data-tooltip-target={`tooltip-${page.title.toLowerCase()}`}
+              data-tooltip-trigger="hover"
+              type="button"
+              class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+            >
+              <Icon
+                name={page.icon}
+                class:list={
+                  currentPath === page.slug
+                    ? icon_css.list + icon_css.color.active
+                    : icon_css.list + icon_css.color.normal
+                }
+              />
+            </button>
+            <div
+              id={`tooltip-${page.title.toLowerCase()}`}
+              role="tooltip"
+              class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            >
+              {page.title}
+              <div class="tooltip-arrow" data-popper-arrow />
+            </div>
+          </a>
+        </>
+      ))
+    }
+  </div>
+  <div class="items-center justify-center hidden ms-auto md:flex">
+    {
+      socials.map((social) => (
+        <>
+          <a
+            href={social.href}
+            title={social.title}
+            target="_blank"
+            rel="noopener"
+          >
+            <button
+              data-tooltip-target={`tooltip-${social.title.toLowerCase()}`}
+              data-tooltip-trigger="hover"
+              type="button"
+              class="p-2.5 group rounded-full hover:bg-gray-100 me-1 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:hover:bg-gray-600"
+            >
+              <Icon
+                name={social.icon}
+                class={`w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white ${social.css}`}
+              />
+              <span class="sr-only">{social.title}</span>
+            </button>
+            <div
+              id={`tooltip-${social.title.toLowerCase()}`}
+              role="tooltip"
+              class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            >
+              {social.title}
+              <div class="tooltip-arrow" data-popper-arrow />
+            </div>
+          </a>
+        </>
+      ))
+    }
+  </div>
+</div>
